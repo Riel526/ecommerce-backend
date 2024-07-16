@@ -18,5 +18,14 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+         \App\Models\Product::factory(10)->create();
+
+         \App\Models\Product::factory()->create([
+            'name' => $this->faker->name,
+            'price' => $this->faker->numberBetween(1, 3000),
+            'stock' => $this->faker->numberBetween(1, 1000),
+            'dateAdded' => $this->faker->date,
+         ]);
     }
 }
