@@ -52,4 +52,38 @@ class ProductController extends Controller
             return response()->json($data,200);
         }
     }
+
+    public function updateProduct(Request $request,$id){
+        $validator = Validator::make($request->all(),
+        [
+            'name'=>'required',
+            'price'=>'required',
+            'stock'=>'required',
+        ]);
+
+        if($validator->fails()){
+
+            $data=[
+                "status"=>422,
+                "message"=>$validator->messages()
+            ];
+            
+            return response()->json($data,422);
+        } else {
+            $product = Product::find($id);
+
+            $product->name=$request->name;
+            $product->price=$request->price;
+            $product->stock=$request->stock;
+
+            $product->save();
+
+            $data=[
+                'status'=>200,
+                'message'=>'Product Updated Successfully'
+            ];
+
+            return response()->json($data,200);
+        }
+    }
 }
