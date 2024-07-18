@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
-use validator;
+use Validator;
 
 class ProductController extends Controller
 {
@@ -22,9 +22,9 @@ class ProductController extends Controller
     public function addProduct(Request $request){
         $validator = Validator::make($request->all(),
         [
-            'name'=>'required',
-            'price'=>'required',
-            'stock'=>'required',
+            'name'=>'required|string',
+            'price'=>'required|numeric',
+            'stock'=>'required|int',
         ]);
 
         if($validator->fails()){
@@ -56,9 +56,9 @@ class ProductController extends Controller
     public function updateProduct(Request $request,$id){
         $validator = Validator::make($request->all(),
         [
-            'name'=>'required',
-            'price'=>'required',
-            'stock'=>'required',
+            'name'=>'required|string',
+            'price'=>'required|numeric',
+            'stock'=>'required|int',
         ]);
 
         if($validator->fails()){
@@ -85,5 +85,27 @@ class ProductController extends Controller
 
             return response()->json($data,200);
         }
+    }
+
+    public function deleteProduct($id){
+        $product = Product::find($id);
+
+        if(!$product){
+            $data = [
+                'status' => 422,
+                'message' => "Product id not found"
+            ];
+
+            return response()->json($data,422);
+        } else{
+            $data = [
+                'status' => 200,
+                'message' => "Product deleted successfully"
+            ];
+            $product->delete();
+            return response()->json($data,200);
+        }
+
+        
     }
 }
