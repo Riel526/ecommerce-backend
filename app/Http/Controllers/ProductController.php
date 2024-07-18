@@ -8,7 +8,7 @@ use Validator;
 
 class ProductController extends Controller
 {
-    public function index(){
+    public function getAllProduct(){
         $product = Product::all();
 
         $data = [
@@ -17,6 +17,26 @@ class ProductController extends Controller
         ];
 
         return response()->json($data,200);
+    }
+
+    public function findProduct($id){
+        $product = Product::find($id);
+
+        if(!$product){
+            $data = [
+                'status'=>422,
+                'message'=> "Product not found"
+            ];
+
+            return response()->json($data,422);
+        } else {
+            $data = [
+                'response'=>200,
+                'product'=>$product
+            ];
+
+            return response()->json($data,200);
+        }
     }
 
     public function addProduct(Request $request){
